@@ -5,8 +5,9 @@ import axios from "axios";
 import SearchForm from "./search-form";
 import zhCN from "antd/es/locale/zh_CN";
 import { Bill, BillCategory } from "./model";
-import { Card, ConfigProvider } from "antd";
+import { Card, ConfigProvider, Space } from "antd";
 import "antd/dist/antd.min.css";
+import BillList from "./bill-list";
 
 // 设置 axios 请求时的 baseURL
 axios.defaults.baseURL = "http://127.0.0.1:3000";
@@ -32,11 +33,10 @@ function App() {
 
   return (
     <Card style={{ width: "80%", margin: "40px auto" }}>
-      <SearchForm categories={categories} />
-
-      <p>Card content</p>
-      <p>Card content</p>
-      <p>Card content</p>
+      <Space direction={"vertical"} style={{ display: "flex" }}>
+        <SearchForm categories={categories} />
+        <BillList billList={billList} categories={categories} />
+      </Space>
     </Card>
   );
 }

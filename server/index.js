@@ -40,7 +40,7 @@ function BillCastFunction(value, context) {
   if (context.header) return value;
   const { index } = context;
   if (index === 0 || index === 3) return Number(value);
-  if (index === 1) return Date(value);
+  if (index === 1) return new Date(Number(value));
   return value;
 }
 function CategoriesCastFunction(value, context) {
