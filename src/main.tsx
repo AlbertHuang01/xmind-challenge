@@ -10,6 +10,7 @@ import { Card, ConfigProvider, Space } from "antd";
 import "antd/dist/antd.min.css";
 import BillList from "./bill-list";
 import AddBill from "./add-bill";
+import { GroupByCategoryType, GroupByIncomeAndExpenditure } from "./bill-list-group";
 
 // 设置 axios 请求时的 baseURL
 axios.defaults.baseURL = "http://127.0.0.1:3000";
@@ -102,6 +103,8 @@ function App() {
             <BillList />
           </Space>
           <AddBill />
+          <GroupByIncomeAndExpenditure />
+          <GroupByCategoryType />
         </APP_DATA.Provider>
       </Card>
     </ConfigProvider>

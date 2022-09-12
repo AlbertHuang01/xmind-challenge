@@ -1,5 +1,5 @@
 import { ColumnsType } from "antd/es/table";
-import { Bill, BillCategory } from "./model";
+import { Bill, BILL_TYPE, BillCategory } from "./model";
 import { Table } from "antd";
 import { useContext } from "react";
 import { APP_DATA } from "./main";
@@ -25,9 +25,9 @@ export default function BillList() {
       dataIndex: "type",
       key: "type",
       render: (_, { type }) => {
-        if (type === 0) {
+        if (type === BILL_TYPE.EXPENDITURE) {
           return "支出";
-        } else if (type === 1) {
+        } else if (type === BILL_TYPE.INCOME) {
           return "收入";
         }
         return "";
