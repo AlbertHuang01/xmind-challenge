@@ -13,12 +13,24 @@ import BillList from "./bill-list";
 // 设置 axios 请求时的 baseURL
 axios.defaults.baseURL = "http://127.0.0.1:3000";
 
-const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(<App />);
+
+interface ConditionType {
+  months: Moment | null;
+}
+
+const defaultValue = {
+  billList: [] as Bill[],
+  categories: [] as BillCategory[],
+  condition: {
+    months: null,
+  } as ConditionType,
+  setCondition(_val: any) {},
+};
+
+type DefaultValueType = typeof defaultValue;
+
+export const APP_DATA = React.createContext<DefaultValueType>(defaultValue);
 
 function App() {
   const [billList, setBillList] = useState<Bill[]>([]);
@@ -56,15 +68,22 @@ function App() {
   }, []);
 
   return (
-    <>
-      <ConfigProvider locale={zhCN}>
-        <Card style={{ width: "80%", margin: "40px auto" }}>
+    <ConfigProvider locale={zhCN}>
+      <Card style={{ width: "80%", margin: "40px auto" }}>
+        <APP_DATA.Provider
+          value={{
+            billList: billListMemo,
+            categories,
+            condition,
+            setCondition,
+          }}
+        >
           <Space direction={"vertical"} style={{ display: "flex" }}>
-            <SearchForm categories={categories} setCondition={setCondition} />
-            <BillList billList={billListMemo} categories={categories} />
+            <SearchForm />
+            <BillList />
           </Space>
-        </Card>
-      </ConfigProvider>
-    </>
+        </APP_DATA.Provider>
+      </Card>
+    </ConfigProvider>
   );
 }

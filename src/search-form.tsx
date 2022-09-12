@@ -1,15 +1,12 @@
 import { Button, DatePicker, Form, Select } from "antd";
-import { BillCategory } from "./model";
 import { useForm } from "antd/es/form/Form";
+import { useContext } from "react";
+import { APP_DATA } from "./main";
 
-export default function SearchForm({
-  categories,
-  setCondition,
-}: {
-  categories: BillCategory[];
-  setCondition: (a: any) => void;
-}) {
+export default function SearchForm() {
   const [form] = useForm();
+
+  const { categories, setCondition } = useContext(APP_DATA);
 
   const onChange = () => {
     setCondition(form.getFieldsValue());

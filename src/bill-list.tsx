@@ -1,13 +1,17 @@
 import { ColumnsType } from "antd/es/table";
 import { Bill, BillCategory } from "./model";
 import { Table } from "antd";
+import { useContext } from "react";
+import { APP_DATA } from "./main";
 
 interface BillListProps {
   billList: Bill[];
   categories: BillCategory[];
 }
 
-export default function BillList({ billList, categories }: BillListProps) {
+export default function BillList() {
+  const { categories, billList } = useContext(APP_DATA);
+
   const columns: ColumnsType<Bill> = [
     { title: "账单时间", dataIndex: "time", key: "time" },
     {
