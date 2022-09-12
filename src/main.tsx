@@ -19,6 +19,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(<App 
 
 interface ConditionType {
   months: Moment | null;
+  category: string | null;
 }
 
 const defaultValue = {
@@ -42,26 +43,28 @@ function App() {
   const [billList, setBillList] = useState<Bill[]>([]);
   const [categories, setCategories] = useState<BillCategory[]>([]);
   const [addBillVisible, setAddBillVisible] = useState(defaultValue.addBillVisible);
-  const [condition, setCondition] = useState<{
-    months: Moment | null;
-  }>({
+  const [condition, setCondition] = useState<ConditionType>({
     months: null,
+    category: null,
   });
 
   const billListMemo = useMemo(() => {
-    const { months } = condition;
+    const { months, category } = condition;
+    let result = billList;
     if (months) {
       const year = months.get("year");
       const month = months.get("months");
-      return billList.filter((item) => {
+      result = result.filter((item) => {
         const itemMoment = moment(item.time);
         const itemYear = itemMoment.get("year");
         const itemMonth = itemMoment.get("month");
         return itemYear === year && itemMonth === month;
       });
-    } else {
-      return billList;
     }
+    if (category) {
+      result = result.filter((item) => item.category === category);
+    }
+    return result;
   }, [billList, condition]);
 
   const addBill = (val: any) => {

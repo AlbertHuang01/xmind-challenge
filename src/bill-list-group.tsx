@@ -17,7 +17,7 @@ export function GroupByIncomeAndExpenditure() {
 
   return (
     <Typography>
-      <Title>收入支出分统计</Title>
+      <Title level={3}>收入支出分组统计</Title>
       <Paragraph>收入：{income} ￥</Paragraph>
       <Paragraph>支出：{expenditure} ￥</Paragraph>
     </Typography>
@@ -39,7 +39,7 @@ export function GroupByCategoryType() {
 
   return (
     <Typography>
-      <Title>账单分类分组统计</Title>
+      <Title level={3}>账单分类分组统计</Title>
       <Paragraph>
         <ul>
           {group.map((item) => (
