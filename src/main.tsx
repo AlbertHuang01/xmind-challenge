@@ -9,6 +9,7 @@ import { Bill, BillCategory } from "./model";
 import { Card, ConfigProvider, Space } from "antd";
 import "antd/dist/antd.min.css";
 import BillList from "./bill-list";
+import AddBill from "./add-bill";
 
 // 设置 axios 请求时的 baseURL
 axios.defaults.baseURL = "http://127.0.0.1:3000";
@@ -26,6 +27,10 @@ const defaultValue = {
     months: null,
   } as ConditionType,
   setCondition(_val: any) {},
+  addBillVisible: false,
+  setAddBillVisible(val: boolean) {},
+  addBill(val: any): any {},
+  loadBillList() {},
 };
 
 type DefaultValueType = typeof defaultValue;
@@ -35,7 +40,7 @@ export const APP_DATA = React.createContext<DefaultValueType>(defaultValue);
 function App() {
   const [billList, setBillList] = useState<Bill[]>([]);
   const [categories, setCategories] = useState<BillCategory[]>([]);
-
+  const [addBillVisible, setAddBillVisible] = useState(defaultValue.addBillVisible);
   const [condition, setCondition] = useState<{
     months: Moment | null;
   }>({
@@ -58,10 +63,20 @@ function App() {
     }
   }, [billList, condition]);
 
-  useEffect(() => {
+  const addBill = (val: any) => {
+    val.time = moment(val.time).format("x");
+    return axios.post("/bills", val);
+  };
+
+  const loadBillList = () => {
     axios.get("/bills").then((resp) => {
-      setBillList(resp.data);
+      const list: Bill[] = resp.data;
+      setBillList(list.sort((a, b) => b.time - a.time));
     });
+  };
+
+  useEffect(() => {
+    loadBillList();
     axios.get("/categories").then((resp) => {
       setCategories(resp.data);
     });
@@ -76,12 +91,17 @@ function App() {
             categories,
             condition,
             setCondition,
+            addBillVisible,
+            setAddBillVisible,
+            addBill,
+            loadBillList,
           }}
         >
           <Space direction={"vertical"} style={{ display: "flex" }}>
             <SearchForm />
             <BillList />
           </Space>
+          <AddBill />
         </APP_DATA.Provider>
       </Card>
     </ConfigProvider>

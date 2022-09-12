@@ -6,10 +6,14 @@ import { APP_DATA } from "./main";
 export default function SearchForm() {
   const [form] = useForm();
 
-  const { categories, setCondition } = useContext(APP_DATA);
+  const { categories, setCondition, setAddBillVisible } = useContext(APP_DATA);
 
   const onChange = () => {
     setCondition(form.getFieldsValue());
+  };
+
+  const onClick = () => {
+    setAddBillVisible(true);
   };
 
   return (
@@ -36,7 +40,9 @@ export default function SearchForm() {
         </Select>
       </Form.Item>
       <Form.Item>
-        <Button type={"primary"}>添加账单</Button>
+        <Button type={"primary"} onClick={onClick}>
+          添加账单
+        </Button>
       </Form.Item>
     </Form>
   );

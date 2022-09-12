@@ -14,7 +14,7 @@ app.use(async (ctx, next) => {
   ctx.set("Access-Control-Allow-Origin", "*");
   ctx.set(
     "Access-Control-Allow-Headers",
-    "Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild"
+    "Content-Type, Content-Length, Authorization, Accept, X-Requested-With "
   );
   ctx.set("Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, OPTIONS");
   if (ctx.method === "OPTIONS") {
@@ -23,9 +23,6 @@ app.use(async (ctx, next) => {
     await next();
   }
 });
-
-let bills = null;
-let categories = null;
 
 async function getCSVContent(path, castFunction) {
   const fileContent = await fsPromise.readFile(path);
@@ -40,7 +37,7 @@ function BillCastFunction(value, context) {
   if (context.header) return value;
   const { index } = context;
   if (index === 0 || index === 3) return Number(value);
-  if (index === 1) return new Date(Number(value));
+  if (index === 1) return Number(value);
   return value;
 }
 function CategoriesCastFunction(value, context) {
@@ -55,16 +52,12 @@ app.use(async (ctx) => {
     ctx.body = "hello";
   } else if (ctx.url === "/bills") {
     if (ctx.method === "GET") {
-      if (bills) {
-        ctx.body = bills;
-      } else {
-        ctx.body = bills = await getCSVContent(__dirname + "/bill.csv", BillCastFunction);
-      }
+      ctx.body = await getCSVContent(__dirname + "/bill.csv", BillCastFunction);
     } else if (ctx.method === "POST") {
       const requestBody = ctx.request.body;
-      if (!bills) {
-        bills = await getCSVContent(__dirname + "/bill.csv", BillCastFunction);
-      }
+
+      const bills = await getCSVContent(__dirname + "/bill.csv", BillCastFunction);
+
       bills.push(requestBody);
       const output = await stringify(bills, { header: true });
       await fsPromise.writeFile(path.join(__dirname, "/bill.csv"), output);
@@ -74,19 +67,10 @@ app.use(async (ctx) => {
     }
   } else if (ctx.url === "/categories") {
     if (ctx.method === "GET") {
-      if (categories) {
-        ctx.body = categories;
-      } else {
-        ctx.body = categories = await getCSVContent(
-          __dirname + "/categories.csv",
-          CategoriesCastFunction
-        );
-      }
+      ctx.body = await getCSVContent(__dirname + "/categories.csv", CategoriesCastFunction);
     } else if (ctx.method === "POST") {
       const requestBody = ctx.request.body;
-      if (!categories) {
-        categories = await getCSVContent(__dirname + "/categories.csv", CategoriesCastFunction);
-      }
+      const categories = await getCSVContent(__dirname + "/categories.csv", CategoriesCastFunction);
       categories.push(requestBody);
       const output = await stringify(categories, { header: true });
       await fsPromise.writeFile(path.join(__dirname, "/categories.csv"), output);

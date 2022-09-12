@@ -3,6 +3,7 @@ import { Bill, BillCategory } from "./model";
 import { Table } from "antd";
 import { useContext } from "react";
 import { APP_DATA } from "./main";
+import moment from "moment";
 
 interface BillListProps {
   billList: Bill[];
@@ -13,7 +14,12 @@ export default function BillList() {
   const { categories, billList } = useContext(APP_DATA);
 
   const columns: ColumnsType<Bill> = [
-    { title: "账单时间", dataIndex: "time", key: "time" },
+    {
+      title: "账单时间",
+      dataIndex: "time",
+      key: "time",
+      render: (val) => moment(val).format("yyyy-MM-DD HH:mm:ss"),
+    },
     {
       title: "账单类型",
       dataIndex: "type",
