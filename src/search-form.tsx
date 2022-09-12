@@ -1,18 +1,29 @@
 import { Button, DatePicker, Form, Select } from "antd";
 import { BillCategory } from "./model";
+import { useForm } from "antd/es/form/Form";
 
-export default function SearchForm({ categories }: { categories: BillCategory[] }) {
-  const onChange = () => {};
+export default function SearchForm({
+  categories,
+  setCondition,
+}: {
+  categories: BillCategory[];
+  setCondition: (a: any) => void;
+}) {
+  const [form] = useForm();
+
+  const onChange = () => {
+    setCondition(form.getFieldsValue());
+  };
 
   return (
     <Form
       layout={"inline"}
       labelCol={{ span: 8 }}
       wrapperCol={{ span: 16 }}
-      initialValues={{ remember: true }}
+      form={form}
       autoComplete="off"
     >
-      <Form.Item label="月份" name="month">
+      <Form.Item label="月份" name="months">
         <DatePicker onChange={onChange} picker="month" allowClear />
       </Form.Item>
       <Form.Item label="账单分类" name="category">

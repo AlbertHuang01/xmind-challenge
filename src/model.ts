@@ -1,23 +1,23 @@
 // 账单类型常量
 export const BILL_TYPE = {
   // 收入
-  INCOME:1,
+  INCOME: 1,
   // 支出
-  EXPENDITURE:0
-}
+  EXPENDITURE: 0,
+};
 
 // 账单
 export interface Bill {
-  time:Date;
-  type:number;
+  time: number;
+  type: number;
   // 账单详细分类id
-  category?:string;
-  amount:number;
+  category?: string;
+  amount: number;
 }
 
 // 账单详细分类
-export interface BillCategory{
-  id:string;
-  name:string;
-  type:number
+export interface BillCategory {
+  id: string;
+  name: string;
+  type: number;
 }
