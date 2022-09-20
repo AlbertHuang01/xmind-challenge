@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from "react";
-import ReactDOM from "react-dom/client";
 import axios from "axios";
 import moment, { Moment } from "moment";
 
@@ -14,8 +13,6 @@ import { GroupByCategoryType, GroupByIncomeAndExpenditure } from "./bill-list-gr
 
 // 设置 axios 请求时的 baseURL
 axios.defaults.baseURL = "http://127.0.0.1:3000";
-
-ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(<App />);
 
 interface ConditionType {
   months: Moment | null;
@@ -39,7 +36,7 @@ type DefaultValueType = typeof defaultValue;
 
 export const APP_DATA = React.createContext<DefaultValueType>(defaultValue);
 
-function App() {
+export function App() {
   const [billList, setBillList] = useState<Bill[]>([]);
   const [categories, setCategories] = useState<BillCategory[]>([]);
   const [addBillVisible, setAddBillVisible] = useState(defaultValue.addBillVisible);
