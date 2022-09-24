@@ -3,10 +3,10 @@ import axios from "axios";
 import moment, { Moment } from "moment";
 
 import SearchForm from "./search-form";
-import zhCN from "antd/es/locale/zh_CN";
+import zhCN from "antd/lib/locale/zh_CN";
 import { Bill, BillCategory } from "./model";
 import { Card, ConfigProvider, Space } from "antd";
-import "antd/dist/antd.min.css";
+import "./main.css";
 import BillList from "./bill-list";
 import AddBill from "./add-bill";
 import { GroupByCategoryType, GroupByIncomeAndExpenditure } from "./bill-list-group";
