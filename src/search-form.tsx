@@ -1,10 +1,9 @@
 import { Button, DatePicker, Form, Select } from "antd";
-import { useForm } from "antd/es/form/Form";
 import { useContext } from "react";
 import { APP_DATA } from "./main";
 
 export default function SearchForm() {
-  const [form] = useForm();
+  const [form] = Form.useForm();
 
   const { categories, setCondition, setAddBillVisible } = useContext(APP_DATA);
 
