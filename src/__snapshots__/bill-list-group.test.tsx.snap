@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`bill-list-group GroupByIncomeAndExpenditure snapshot 1`] = `
+<body>
+  <div>
+    <article
+      class="ant-typography"
+    >
+      <h3
+        class="ant-typography"
+      >
+        收入支出分组统计
+      </h3>
+      <div
+        class="ant-typography"
+      >
+        收入：
+        134001
+         ￥
+      </div>
+      <div
+        class="ant-typography"
+      >
+        支出：
+        104800
+         ￥
+      </div>
+    </article>
+  </div>
+</body>
+`;
