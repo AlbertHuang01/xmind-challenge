@@ -1,3 +1,4 @@
+import { getBillList, getCategories } from './service';
 import { API } from './const';
 import axios from 'axios';
 import { AddBillModel, Bill, BillCategory } from "./model";
@@ -43,23 +44,16 @@ export const appContextInit = () => {
     return getBillListByCondition(billList,condition)
   }, [billList, condition]);
 
-  const loadBillList = () => {
-    axios.get(API.BILLS).then((resp: { data: Bill[]; }) => {
-      const list: Bill[] = resp.data;
-      setBillList(list.sort((a, b) => b.time - a.time));
-    });
-  };
-
   const addBill = (val: AddBillModel) => {
     val.time = moment(val.time).format("x");
     return axios.post(API.BILLS, val);
   };
 
+  const loadBillList=()=> getBillList().then(data=>setBillList(data))
+
   useEffect(() => {
-    loadBillList();
-    axios.get(API.CATEGORIES).then((resp) => {
-      setCategories(resp.data);
-    });
+    loadBillList()
+    getCategories().then(data=>setCategories(data))
   }, []);
 
   return {
