@@ -17,14 +17,6 @@ export const APP_DATA = APP_DATA_CONTEXT
 
 export function App() {
   const appContext=appContextInit()
-  const {setCategories,loadBillList}=appContext
-
-  useEffect(() => {
-    loadBillList();
-    axios.get("/categories").then((resp) => {
-      setCategories(resp.data);
-    });
-  }, []);
 
   return (
     <ConfigProvider locale={zhCN}>

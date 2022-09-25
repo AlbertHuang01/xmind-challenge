@@ -1,3 +1,4 @@
 export const API={
-  BILLS:'/bills'
+  BILLS:'/bills',
+  CATEGORIES:'/categories'
 }

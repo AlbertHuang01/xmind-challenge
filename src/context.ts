@@ -2,7 +2,7 @@ import { API } from './const';
 import axios from 'axios';
 import { AddBillModel, Bill, BillCategory } from "./model";
 import moment, { Moment } from "moment";
-import React, { useContext, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 
 interface ConditionType {
   months: Moment | null;
@@ -10,6 +10,25 @@ interface ConditionType {
 }
 
 export const APP_DATA_CONTEXT = React.createContext<any>({});
+
+export const getBillListByCondition=(billList:Bill[], condition:ConditionType)=>{
+  const { months, category } = condition;
+  let result = billList;
+  if (months) {
+    const year = months.get("year");
+    const month = months.get("months");
+    result = result.filter((item) => {
+      const itemMoment = moment(item.time);
+      const itemYear = itemMoment.get("year");
+      const itemMonth = itemMoment.get("month");
+      return itemYear === year && itemMonth === month;
+    });
+  }
+  if (category) {
+    result = result.filter((item) => item.category === category);
+  }
+  return result;
+}
 
 export const appContextInit = () => {
   const [billList, setBillList] = useState<Bill[]>([]);
@@ -21,22 +40,7 @@ export const appContextInit = () => {
   });
 
   const billListMemo = useMemo(() => {
-    const { months, category } = condition;
-    let result = billList;
-    if (months) {
-      const year = months.get("year");
-      const month = months.get("months");
-      result = result.filter((item) => {
-        const itemMoment = moment(item.time);
-        const itemYear = itemMoment.get("year");
-        const itemMonth = itemMoment.get("month");
-        return itemYear === year && itemMonth === month;
-      });
-    }
-    if (category) {
-      result = result.filter((item) => item.category === category);
-    }
-    return result;
+    return getBillListByCondition(billList,condition)
   }, [billList, condition]);
 
   const loadBillList = () => {
@@ -51,6 +55,12 @@ export const appContextInit = () => {
     return axios.post(API.BILLS, val);
   };
 
+  useEffect(() => {
+    loadBillList();
+    axios.get(API.CATEGORIES).then((resp) => {
+      setCategories(resp.data);
+    });
+  }, []);
 
   return {
     billList: billListMemo,
