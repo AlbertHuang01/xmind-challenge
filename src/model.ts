@@ -1,3 +1,4 @@
+import { Moment } from 'moment';
 // 账单类型常量
 export const BILL_TYPE = {
   // 收入
@@ -14,7 +15,13 @@ export interface Bill {
   category?: string;
   amount: number;
 }
-
+export interface AddBillModel {
+  time: Moment|string;
+  type: number;
+  // 账单详细分类id
+  category?: string;
+  amount: number;
+}
 // 账单详细分类
 export interface BillCategory {
   id: string;

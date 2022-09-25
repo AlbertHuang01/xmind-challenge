@@ -1,5 +1,6 @@
+import { API } from './const';
 import axios from 'axios';
-import { Bill, BillCategory } from "./model";
+import { AddBillModel, Bill, BillCategory } from "./model";
 import moment, { Moment } from "moment";
 import React, { useContext, useMemo, useState } from "react";
 
@@ -39,15 +40,15 @@ export const appContextInit = () => {
   }, [billList, condition]);
 
   const loadBillList = () => {
-    axios.get("/bills").then((resp: { data: Bill[]; }) => {
+    axios.get(API.BILLS).then((resp: { data: Bill[]; }) => {
       const list: Bill[] = resp.data;
       setBillList(list.sort((a, b) => b.time - a.time));
     });
   };
 
-  const addBill = (val: any) => {
+  const addBill = (val: AddBillModel) => {
     val.time = moment(val.time).format("x");
-    return axios.post("/bills", val);
+    return axios.post(API.BILLS, val);
   };
 
 
