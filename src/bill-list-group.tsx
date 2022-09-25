@@ -1,12 +1,11 @@
-import { useContext } from "react";
-import { APP_DATA } from "./main";
 import { BILL_TYPE } from "./model";
 import { Typography } from "antd";
+import { useAppContext } from "./context";
 
 const { Title, Paragraph } = Typography;
 
 export function GroupByIncomeAndExpenditure() {
-  const { billList } = useContext(APP_DATA);
+  const { billList } = useAppContext();
 
   const income = billList
     .filter((bill) => bill.type === BILL_TYPE.INCOME)
@@ -25,7 +24,7 @@ export function GroupByIncomeAndExpenditure() {
 }
 
 export function GroupByCategoryType() {
-  const { billList, categories } = useContext(APP_DATA);
+  const { billList, categories } = useAppContext();
   const group = categories
     .map((category) => {
       const foundBills = billList.filter((bill) => bill.category === category.id);

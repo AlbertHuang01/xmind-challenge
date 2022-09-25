@@ -1,12 +1,11 @@
 import { DatePicker, Form, InputNumber, message, Modal, Select } from "antd";
-import { useContext } from "react";
-import { APP_DATA } from "./main";
 import { BILL_TYPE } from "./model";
 import { AxiosResponse } from "axios";
+import { useAppContext } from "./context";
 
 export default function AddBill() {
   const { categories, addBillVisible, setAddBillVisible, addBill, loadBillList } =
-    useContext(APP_DATA);
+  useAppContext();
   const [form] = Form.useForm();
   const onOk = () => {
     form.validateFields().then((value) => {
