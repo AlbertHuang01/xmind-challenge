@@ -1,8 +1,8 @@
 import { ColumnsType } from "antd/es/table";
 import { Bill, BILL_TYPE } from "./model";
 import { Table } from "antd";
-import moment from "moment";
 import { useAppContext } from "./context";
+import dayjs from 'dayjs'
 
 export default function BillList() {
   const { categories, billList } = useAppContext();
@@ -12,7 +12,7 @@ export default function BillList() {
       title: "账单时间",
       dataIndex: "time",
       key: "time",
-      render: (val) => moment(val).format("yyyy-MM-DD HH:mm:ss"),
+      render: (val) =>dayjs(val).format('YYYY-MM-DD HH:mm:ss'),
     },
     {
       title: "账单类型",

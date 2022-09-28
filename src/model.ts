@@ -1,4 +1,4 @@
-import { Moment } from 'moment';
+import  {Dayjs}  from 'dayjs';
 // 账单类型常量
 export const BILL_TYPE = {
   // 收入
@@ -16,7 +16,7 @@ export interface Bill {
   amount: number;
 }
 export interface AddBillModel {
-  time: Moment|string;
+  time: Dayjs|number;
   type: number;
   // 账单详细分类id
   category?: string;
