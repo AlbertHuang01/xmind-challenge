@@ -1,5 +1,26 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`bill-list-group GroupByCategoryType snapshot 1`] = `
+<body>
+  <div>
+    <article
+      class="ant-typography"
+    >
+      <h3
+        class="ant-typography"
+      >
+        账单分类分组统计
+      </h3>
+      <div
+        class="ant-typography"
+      >
+        <ul />
+      </div>
+    </article>
+  </div>
+</body>
+`;
+
 exports[`bill-list-group GroupByIncomeAndExpenditure snapshot 1`] = `
 <body>
   <div>

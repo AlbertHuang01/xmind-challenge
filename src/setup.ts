@@ -19,7 +19,7 @@ Object.defineProperty(window, 'matchMedia', {
 
 // mock server
 const handlers = [
-  rest.get(API.BILLS, async (_req, res, ctx) => {
+  rest.get(API.BASE_URL+API.BILLS, async (_req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json([
@@ -51,6 +51,26 @@ const handlers = [
       ])
     );
   }),
+  rest.get(API.BASE_URL+API.CATEGORIES,async(_req,res,ctx)=>{
+    return res(
+      ctx.status(200),
+      ctx.json([
+        {
+          "id": "1bcddudhmh",
+          "type": 0,
+          "name": "车贷"
+        },{
+          "id": "hc5g66kviq",
+          "type": 0,
+          "name": "车辆保养"
+        },{
+          "id": "8s0p77c323",
+          "type": 0,
+          "name": "房贷"
+        }
+      ])
+    )
+  })
 ];
 
 const server = setupServer(...handlers);
