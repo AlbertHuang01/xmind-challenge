@@ -9,9 +9,10 @@ import BillList from "./bill-list";
 import AddBill from "./add-bill";
 import { GroupByCategoryType, GroupByIncomeAndExpenditure } from "./bill-list-group";
 import { appContextInit, APP_DATA_CONTEXT } from "./context";
+import { API } from "./const";
 
 // 设置 axios 请求时的 baseURL
-axios.defaults.baseURL = "http://127.0.0.1:3000";
+axios.defaults.baseURL = API.BASE_URL;
 
 export const APP_DATA = APP_DATA_CONTEXT
 

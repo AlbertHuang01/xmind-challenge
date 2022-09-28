@@ -1,6 +1,7 @@
 import { API } from './const';
 import { rest } from 'msw'
 import { setupServer } from "msw/node";
+import axios from 'axios'
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -16,6 +17,7 @@ Object.defineProperty(window, 'matchMedia', {
   })),
 });
 
+axios.defaults.baseURL = API.BASE_URL;
 
 // mock server
 const handlers = [

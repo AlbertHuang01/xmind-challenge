@@ -14,7 +14,26 @@ exports[`bill-list-group GroupByCategoryType snapshot 1`] = `
       <div
         class="ant-typography"
       >
-        <ul />
+        <ul>
+          <li>
+            车贷
+            ：
+            0
+            ￥
+          </li>
+          <li>
+            车辆保养
+            ：
+            0
+            ￥
+          </li>
+          <li>
+            房贷
+            ：
+            5400
+            ￥
+          </li>
+        </ul>
       </div>
     </article>
   </div>
@@ -36,14 +55,14 @@ exports[`bill-list-group GroupByIncomeAndExpenditure snapshot 1`] = `
         class="ant-typography"
       >
         收入：
-        134001
+        0
          ￥
       </div>
       <div
         class="ant-typography"
       >
         支出：
-        104800
+        12700
          ￥
       </div>
     </article>
