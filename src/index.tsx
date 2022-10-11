@@ -1,4 +1,4 @@
 import ReactDOM from "react-dom";
-import { App } from "./main";
+import './index.css';
 
-ReactDOM.render(<App />,document.getElementById("root"))
+ReactDOM.render(<h1>hello</h1>,document.getElementById("root"))
