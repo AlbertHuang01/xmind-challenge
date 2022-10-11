@@ -1,5 +1,5 @@
 import { queryBillList } from './service';
-import { Bill } from './model';
+import { Bill, BILL_TYPE } from './model';
 import { createContext, useEffect, useMemo, useState } from "react";
 import dayjs from 'dayjs';
 
@@ -41,12 +41,19 @@ export function initContext() {
     return result
   }, [billList, condition])
 
+  const billListGroupByType = useMemo(() => {
+    const income = billListFilted.filter(bill => bill.type === BILL_TYPE.INCOME)
+    const expenditure = billListFilted.filter(bill => bill.type === BILL_TYPE.EXPENDITURE)
+    return { income, expenditure }
+  }, [billListFilted])
+
   useEffect(() => {
     queryBillList().then(setBillList)
   }, [])
 
   return {
     billList: billListFilted,
+    billListGroupByType,
     condition,
     setCondition
   }
