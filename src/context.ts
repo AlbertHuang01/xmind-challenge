@@ -1,11 +1,7 @@
-import { queryBillList, addBillItem } from './service';
-import { Bill, BILL_TYPE } from './model';
-import { createContext, useEffect, useMemo, useState } from "react";
+import { queryBillList, addBillItem, queryCategoryList } from './service';
+import { Bill, BILL_TYPE, BillCategory } from './model';
+import { createContext, useEffect, useMemo, useState, useContext } from "react";
 import dayjs from 'dayjs';
-
-interface ContextProps {
-
-}
 
 interface Condition {
   date?: {
@@ -15,13 +11,15 @@ interface Condition {
   categoryId?: string
 }
 
-const context = createContext<ContextProps>({})
+const context = createContext({})
 
 export const Provicer = context.Provider
 
 export function initContext() {
   const [billList, setBillList] = useState<Bill[]>([])
+  const [categoryList, setCategoryList] = useState<BillCategory[]>([])
   const [condition, setCondition] = useState<Condition>(null)
+  const [addBillVisible,setAddBillVisible]=useState(false)
 
   const billListFilted = useMemo(() => {
     let result = billList;
@@ -55,6 +53,7 @@ export function initContext() {
 
   useEffect(() => {
     queryBillList().then(setBillList)
+    queryCategoryList().then(setCategoryList)
   }, [])
 
   return {
@@ -62,6 +61,13 @@ export function initContext() {
     billListGroupByType,
     condition,
     setCondition,
-    addBill
+    addBill,
+    categoryList,
+    addBillVisible,
+    setAddBillVisible
   }
+}
+
+export const useAppContext = () => {
+  return useContext(context) as ReturnType<typeof initContext>
 }
