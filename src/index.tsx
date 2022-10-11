@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom";
-import { Button, Card, ConfigProvider, DatePicker, Form, Select, Space, Table, Typography } from "antd";
+import { Button, Card, ConfigProvider, DatePicker, Form, InputNumber, message, Modal, Select, Space, Table, Typography } from "antd";
 import { ColumnsType } from "antd/es/table";
 import zhCN from "antd/lib/locale/zh_CN";
 import './index.css';
@@ -24,7 +24,8 @@ function App() {
             <SearchForm />
             <BillList />
           </Space>
-          <BillListGroup/>
+          <BillListGroup />
+          <AddBillModal/>
         </Provicer>
       </Card>
     </ConfigProvider>
@@ -120,15 +121,15 @@ function BillList() {
 
 // 账单列表分组
 function BillListGroup() {
-  const { billListGroupByType,billListGroupByCategory } = useAppContext();
+  const { billListGroupByType, billListGroupByCategory } = useAppContext();
   const { Title, Paragraph } = Typography
   return <>
-  <Typography>
-    <Title level={3}>收入支出分组统计</Title>
-    <Paragraph>收入：{billListGroupByType.income} ￥</Paragraph>
-    <Paragraph>支出：{billListGroupByType.expenditure} ￥</Paragraph>
-  </Typography>
-  <Typography>
+    <Typography>
+      <Title level={3}>收入支出分组统计</Title>
+      <Paragraph>收入：{billListGroupByType.income} ￥</Paragraph>
+      <Paragraph>支出：{billListGroupByType.expenditure} ￥</Paragraph>
+    </Typography>
+    <Typography>
       <Title level={3}>账单分类分组统计</Title>
       <Paragraph>
         <ul>
@@ -141,4 +142,63 @@ function BillListGroup() {
       </Paragraph>
     </Typography>
   </>
+}
+
+// 添加账单的弹框
+function AddBillModal() {
+  const { categoryList: categories, addBillVisible, setAddBillVisible, addBill } =
+    useAppContext();
+
+  const [form] = Form.useForm();
+
+  const onOk = () => {
+    form.validateFields().then((value) => {
+      try{
+        addBill(value)
+      }catch(e){
+        message.error("添加失败", 10);
+      }
+    });
+  };
+
+  const onCancel = () => {
+    setAddBillVisible(false);
+  };
+
+  return <Modal title="添加账单" open={addBillVisible} onOk={onOk} onCancel={onCancel}>
+      <Form labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} form={form} autoComplete="off">
+        <Form.Item
+          label="账单时间"
+          name="time"
+          rules={[{ required: true, message: "账单时间是必须的" }]}
+        >
+          <DatePicker allowClear style={{ width: "100%" }} />
+        </Form.Item>
+        <Form.Item
+          label="账单类型"
+          name="type"
+          rules={[{ required: true, message: "账单类型是必须的" }]}
+        >
+          <Select allowClear placeholder={"账单类型"}>
+            <Select.Option value={BILL_TYPE.INCOME}>收入</Select.Option>
+            <Select.Option value={BILL_TYPE.EXPENDITURE}>支出</Select.Option>
+          </Select>
+        </Form.Item>
+        <Form.Item label="账单分类" name="category">
+          <Select allowClear placeholder={"请选择账单分类"}>
+            {categories.map((category) => (
+              <Select.Option key={category.id}>{category.name}</Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+        <Form.Item
+          label="账单金额"
+          name="amount"
+          rules={[{ required: true, message: "账单金额是必须的" }]}
+          initialValue={0}
+        >
+          <InputNumber addonAfter="￥" min={1} style={{ width: "100%" }} />
+        </Form.Item>
+      </Form>
+    </Modal>
 }
