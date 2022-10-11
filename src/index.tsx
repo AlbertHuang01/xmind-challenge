@@ -24,7 +24,7 @@ function App() {
             <SearchForm />
             <BillList />
           </Space>
-          <BillListGroup/>
+          {/* <BillListGroup/> */}
         </Provicer>
       </Card>
     </ConfigProvider>

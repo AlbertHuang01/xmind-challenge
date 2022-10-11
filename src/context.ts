@@ -40,8 +40,8 @@ export function initContext() {
   }, [billList, condition])
 
   const billListGroupByType = useMemo(() => {
-    const income = billListFilted.filter(bill => bill.type === BILL_TYPE.INCOME)
-    const expenditure = billListFilted.filter(bill => bill.type === BILL_TYPE.EXPENDITURE)
+    const income = billListFilted.filter(bill => bill.type === BILL_TYPE.INCOME).reduce((prev, curr) => prev + curr.amount, 0)
+    const expenditure = billListFilted.filter(bill => bill.type === BILL_TYPE.EXPENDITURE).reduce((prev, curr) => prev + curr.amount, 0)
     return { income, expenditure }
   }, [billListFilted])
 

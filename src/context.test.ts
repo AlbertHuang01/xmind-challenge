@@ -1,5 +1,6 @@
 import { Bill, BILL_TYPE } from './model';
 import { renderHook } from '@testing-library/react-hooks';
+import {act} from '@testing-library/react'
 import { initContext } from './context';
 import * as service from './service';
 import dayjs from 'dayjs';
@@ -15,6 +16,7 @@ const mockBillList: Bill[] = [
 describe('initContext()', () => {
   jest.spyOn(service, 'queryBillList').mockResolvedValue(Promise.resolve(mockBillList))
   jest.spyOn(service, 'addBillItem').mockResolvedValue(Promise.resolve(mockBillList[0]))
+  jest.spyOn(service, 'queryCategoryList').mockResolvedValue(Promise.resolve([]))
 
 
   it('test condition with setCondition', () => {
@@ -61,12 +63,12 @@ describe('initContext()', () => {
     it('should group by type', async () => {
       const { result, waitForNextUpdate } = renderHook(() => initContext())
       await waitForNextUpdate()
-      expect(result.current.billListGroupByType.income[0]).toEqual(mockBillList[0])
-      expect(result.current.billListGroupByType.expenditure[0]).toEqual(mockBillList[1])
+      expect(result.current.billListGroupByType.income).toEqual(1)
+      expect(result.current.billListGroupByType.expenditure).toEqual(2)
 
       result.current.setCondition({ date: { year: 2020, month: 2 } })
-      expect(result.current.billListGroupByType.income).toEqual([])
-      expect(result.current.billListGroupByType.expenditure).toEqual([])
+      expect(result.current.billListGroupByType.income).toEqual(0)
+      expect(result.current.billListGroupByType.expenditure).toEqual(0)
 
     })
 
