@@ -56,7 +56,7 @@ export function initContext() {
         };
       })
       .sort((a, b) => a.totalAmount - b.totalAmount)
-  }, [billListFilted,categoryList])
+  }, [billListFilted, categoryList])
 
   const addBill = (bill: Bill) => {
     addBillItem(bill).then(() => {
@@ -82,6 +82,8 @@ export function initContext() {
   }
 }
 
+export type ContextProps = ReturnType<typeof initContext>
+
 export const useAppContext = () => {
-  return useContext(context) as ReturnType<typeof initContext>
+  return useContext(context) as ContextProps
 }

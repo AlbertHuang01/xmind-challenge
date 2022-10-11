@@ -22,4 +22,8 @@ describe('用于检查 jest 功能 是否正常', () => {
     const categoryList=await queryCategoryList()
     expect(categoryList).toEqual(mockCategoryList)
   })
+
+  it('check NODE_ENV', () => {
+    expect(process.env['NODE_ENV']).toBe('test')
+  })
 })

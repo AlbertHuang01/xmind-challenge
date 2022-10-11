@@ -11,7 +11,9 @@ import dayjs from "dayjs";
 
 axios.defaults.baseURL = API.BASE_URL;
 
-ReactDOM.render(<App />, document.getElementById("root"))
+if(process.env.NODE_ENV !== 'test') {
+  ReactDOM.render(<App />, document.getElementById("root"))
+}
 
 function App() {
   const contextValue = initContext()
@@ -33,7 +35,7 @@ function App() {
 }
 
 // 条件查询的表单
-function SearchForm() {
+export function SearchForm() {
   const [form] = Form.useForm();
 
   const { categoryList, setCondition, setAddBillVisible } = useAppContext();
@@ -69,7 +71,7 @@ function SearchForm() {
       </Select>
     </Form.Item>
     <Form.Item>
-      <Button type={"primary"} onClick={onClick}>
+      <Button type={"primary"} onClick={onClick} data-testid="search-button">
         添加账单
       </Button>
     </Form.Item>
@@ -77,7 +79,7 @@ function SearchForm() {
 }
 
 // 账单列表
-function BillList() {
+export function BillList() {
   const { categoryList: categories, billList } = useAppContext();
 
   const columns: ColumnsType<Bill> = [
@@ -120,7 +122,7 @@ function BillList() {
 }
 
 // 账单列表分组
-function BillListGroup() {
+export function BillListGroup() {
   const { billListGroupByType, billListGroupByCategory } = useAppContext();
   const { Title, Paragraph } = Typography
   return <>
@@ -145,7 +147,7 @@ function BillListGroup() {
 }
 
 // 添加账单的弹框
-function AddBillModal() {
+export function AddBillModal() {
   const { categoryList: categories, addBillVisible, setAddBillVisible, addBill } =
     useAppContext();
 
