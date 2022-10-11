@@ -14,6 +14,8 @@ const mockBillList: Bill[] = [
 
 describe('initContext()', () => {
   jest.spyOn(service, 'queryBillList').mockResolvedValue(Promise.resolve(mockBillList))
+  jest.spyOn(service, 'addBillItem').mockResolvedValue(Promise.resolve(mockBillList[0]))
+
 
   it('test condition with setCondition', () => {
     const { result } = renderHook(() => initContext())
@@ -66,6 +68,15 @@ describe('initContext()', () => {
       expect(result.current.billListGroupByType.income).toEqual([])
       expect(result.current.billListGroupByType.expenditure).toEqual([])
 
+    })
+
+    it('should add bill', async () => {
+      const index=0
+      const { result, waitForNextUpdate } = renderHook(() => initContext())
+      await waitForNextUpdate()
+      await result.current.addBill(mockBillList[index])
+      expect(service.addBillItem).toBeCalledWith(mockBillList[index])
+      expect(service.queryBillList).toBeCalled()
     })
   })
 
