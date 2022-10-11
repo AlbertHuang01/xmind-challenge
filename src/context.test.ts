@@ -1,6 +1,6 @@
 import { Bill, BILL_TYPE } from './model';
 import { renderHook } from '@testing-library/react-hooks';
-import {act} from '@testing-library/react'
+import { act } from '@testing-library/react'
 import { initContext } from './context';
 import * as service from './service';
 import dayjs from 'dayjs';
@@ -16,7 +16,10 @@ const mockBillList: Bill[] = [
 describe('initContext()', () => {
   jest.spyOn(service, 'queryBillList').mockResolvedValue(Promise.resolve(mockBillList))
   jest.spyOn(service, 'addBillItem').mockResolvedValue(Promise.resolve(mockBillList[0]))
-  jest.spyOn(service, 'queryCategoryList').mockResolvedValue(Promise.resolve([]))
+  jest.spyOn(service, 'queryCategoryList').mockResolvedValue(Promise.resolve([
+    { id: '1', name: '1', type: BILL_TYPE.INCOME },
+    { id: '2', name: '2', type: BILL_TYPE.EXPENDITURE },
+  ]))
 
 
   it('test condition with setCondition', () => {
@@ -72,8 +75,35 @@ describe('initContext()', () => {
 
     })
 
+    it('billListGroupByType', async () => {
+      const { result, waitForNextUpdate } = renderHook(() => initContext())
+      await waitForNextUpdate()
+      expect(result.current.billListGroupByType.income).toEqual(1)
+      expect(result.current.billListGroupByType.expenditure).toEqual(2)
+
+      result.current.setCondition({ date: { year: 2020, month: 2 } })
+      expect(result.current.billListGroupByType.income).toEqual(0)
+      expect(result.current.billListGroupByType.expenditure).toEqual(0)
+
+    })
+
+    it('billListGroupByCategory', async () => {
+      const { result, waitForNextUpdate } = renderHook(() => initContext())
+      await waitForNextUpdate()
+
+      expect(result.current.billListGroupByCategory).toEqual([
+        { name: '1', totalAmount: 1 },
+        { name: '2', totalAmount: 2 },
+      ])
+
+      result.current.setCondition({ date: { year: 2020, month: 2 } })
+      expect(result.current.billListGroupByCategory).toEqual([{ name: '1', totalAmount: 0 },
+      { name: '2', totalAmount: 0 },])
+
+    })
+
     it('should add bill', async () => {
-      const index=0
+      const index = 0
       const { result, waitForNextUpdate } = renderHook(() => initContext())
       await waitForNextUpdate()
       await result.current.addBill(mockBillList[index])

@@ -24,7 +24,7 @@ function App() {
             <SearchForm />
             <BillList />
           </Space>
-          {/* <BillListGroup/> */}
+          <BillListGroup/>
         </Provicer>
       </Card>
     </ConfigProvider>
@@ -119,12 +119,26 @@ function BillList() {
 }
 
 // 账单列表分组
-// function BillListGroup() {
-//   const { billListGroupByType } = useAppContext();
-//   const { Title, Paragraph } = Typography
-//   return <Typography>
-//     <Title level={3}>收入支出分组统计</Title>
-//     <Paragraph>收入：{billListGroupByType.income} ￥</Paragraph>
-//     <Paragraph>支出：{billListGroupByType.expenditure} ￥</Paragraph>
-//   </Typography>
-// }
+function BillListGroup() {
+  const { billListGroupByType,billListGroupByCategory } = useAppContext();
+  const { Title, Paragraph } = Typography
+  return <>
+  <Typography>
+    <Title level={3}>收入支出分组统计</Title>
+    <Paragraph>收入：{billListGroupByType.income} ￥</Paragraph>
+    <Paragraph>支出：{billListGroupByType.expenditure} ￥</Paragraph>
+  </Typography>
+  <Typography>
+      <Title level={3}>账单分类分组统计</Title>
+      <Paragraph>
+        <ul>
+          {billListGroupByCategory.map((item) => (
+            <li key={item.name}>
+              {item.name}：{item.totalAmount}￥
+            </li>
+          ))}
+        </ul>
+      </Paragraph>
+    </Typography>
+  </>
+}

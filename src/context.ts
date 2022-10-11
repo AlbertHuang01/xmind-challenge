@@ -19,7 +19,7 @@ export function initContext() {
   const [billList, setBillList] = useState<Bill[]>([])
   const [categoryList, setCategoryList] = useState<BillCategory[]>([])
   const [condition, setCondition] = useState<Condition>(null)
-  const [addBillVisible,setAddBillVisible]=useState(false)
+  const [addBillVisible, setAddBillVisible] = useState(false)
 
   const billListFilted = useMemo(() => {
     let result = billList;
@@ -45,6 +45,19 @@ export function initContext() {
     return { income, expenditure }
   }, [billListFilted])
 
+  const billListGroupByCategory = useMemo(() => {
+    return categoryList
+      .map((category) => {
+        const foundBills = billListFilted.filter((bill) => bill.category === category.id);
+        const totalAmount = foundBills.reduce((pre, curr) => pre + curr.amount, 0);
+        return {
+          name: category.name,
+          totalAmount,
+        };
+      })
+      .sort((a, b) => a.totalAmount - b.totalAmount)
+  }, [billListFilted,categoryList])
+
   const addBill = (bill: Bill) => {
     addBillItem(bill).then(() => {
       queryBillList().then(setBillList)
@@ -59,6 +72,7 @@ export function initContext() {
   return {
     billList: billListFilted,
     billListGroupByType,
+    billListGroupByCategory,
     condition,
     setCondition,
     addBill,
