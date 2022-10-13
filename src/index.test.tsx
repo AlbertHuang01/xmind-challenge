@@ -3,7 +3,7 @@ import { BillList, BillListGroup, SearchForm } from './index';
 import * as context from './context'
 import dayjs from "dayjs";
 import { BILL_TYPE } from "./contant";
-import { render ,screen } from "@testing-library/react";
+import { fireEvent, render ,screen } from "@testing-library/react";
 
 jest.mock('./contant')
 
@@ -40,7 +40,10 @@ describe('<SearchForm />', () => {
       } as unknown as context.ContextProps
     })
 
-    render(<SearchForm openDatePicker openCategorySelect/>);
+    render(<SearchForm/>);
+
+    const elMonths = document.querySelector('input[id="months"]');
+    fireEvent.keyDown(elMonths, { bubbles: true });
 
     (document.querySelector('[title="2022-01"]') as HTMLTableCellElement)?.click()
 
@@ -51,6 +54,18 @@ describe('<SearchForm />', () => {
       }
     })
 
+    const elCategory = document.querySelector('input[id="category"]');
+    fireEvent.keyDown(elCategory, { bubbles: true });
+
+    (document.querySelector('[title="1"]') as HTMLTableCellElement)?.click();
+
+    expect(setCondition).toBeCalledWith({
+      date:{
+        year:2022,
+        month:1,
+      },
+      categoryId:'1'
+    })
   })
 })
 

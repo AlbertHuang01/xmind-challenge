@@ -37,28 +37,21 @@ export function App() {
 }
 
 // 条件查询的表单
-export function SearchForm({openDatePicker,openCategorySelect}: {openDatePicker?: boolean,openCategorySelect?: boolean}) {
+export function SearchForm() {
   const [form] = Form.useForm();
 
-  const { categoryList, setCondition,condition, setAddBillVisible } = useAppContext();
+  const { categoryList, setCondition, condition, setAddBillVisible } = useAppContext();
 
   const onChange = () => {
-    const {category}=form.getFieldsValue()
+    const { category, months } = form.getFieldsValue()
     setCondition({
-      categoryId:category,
-
+      categoryId: category,
+      date: {
+        year: months.year(),
+        month: months.month() + 1,
+      }
     });
   };
-
-  const onDateChange = (date)=>{
-    setCondition({
-      ...condition,
-      date:{
-        year:date.year(),
-        month:date.month()+1,
-      }
-    })
-  }
 
   const onClick = () => {
     setAddBillVisible(true);
@@ -72,7 +65,7 @@ export function SearchForm({openDatePicker,openCategorySelect}: {openDatePicker?
     autoComplete="off"
   >
     <Form.Item label="月份" name="months">
-      <DatePicker onChange={onDateChange} picker="month" allowClear open={openDatePicker}/>
+      <DatePicker onChange={onChange} picker="month" allowClear />
     </Form.Item>
     <Form.Item label="账单分类" name="category">
       <Select
@@ -80,7 +73,6 @@ export function SearchForm({openDatePicker,openCategorySelect}: {openDatePicker?
         onChange={onChange}
         allowClear
         placeholder={"请选择账单分类"}
-        open={openCategorySelect}
       >
         {categoryList.map((category) => (
           <Select.Option key={category.id}>{category.name}</Select.Option>
