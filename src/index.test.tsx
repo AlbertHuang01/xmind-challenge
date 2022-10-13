@@ -3,7 +3,7 @@ import { BillList, BillListGroup, SearchForm } from './index';
 import * as context from './context'
 import dayjs from "dayjs";
 import { BILL_TYPE } from "./contant";
-import { render } from "@testing-library/react";
+import { render ,screen } from "@testing-library/react";
 
 jest.mock('./contant')
 
@@ -27,6 +27,31 @@ describe('<SearchForm />', () => {
     const elSearchButton = div.querySelectorAll('[data-testid="search-button"]');
     expect(elSearchButton).toHaveLength(1)
   });
+
+  it('will called setCondition',()=>{
+    const setCondition = jest.fn()
+
+    jest.spyOn(context, 'useAppContext').mockImplementation(() => {
+      return {
+        setCondition,
+        categoryList: [
+          { id: '1', name: '1', type: BILL_TYPE.INCOME },
+        ]
+      } as unknown as context.ContextProps
+    })
+
+    render(<SearchForm openDatePicker openCategorySelect/>);
+
+    (document.querySelector('[title="2022-01"]') as HTMLTableCellElement)?.click()
+
+    expect(setCondition).toBeCalledWith({
+      date:{
+        year:2022,
+        month:1,
+      }
+    })
+
+  })
 })
 
 it('<BillList />', () => {

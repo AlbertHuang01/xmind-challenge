@@ -8,14 +8,16 @@ import axios from "axios";
 import { API } from "./service";
 import { Bill, BILL_TYPE } from "./model";
 import dayjs from "dayjs";
+import { fireEvent, screen } from '@testing-library/react'
+import { useEffect } from "react";
 
 axios.defaults.baseURL = API.BASE_URL;
 
-if(process.env.NODE_ENV !== 'test') {
+if (process.env.NODE_ENV !== 'test') {
   ReactDOM.render(<App />, document.getElementById("root"))
 }
 
-function App() {
+export function App() {
   const contextValue = initContext()
 
   return (
@@ -27,7 +29,7 @@ function App() {
             <BillList />
           </Space>
           <BillListGroup />
-          <AddBillModal/>
+          <AddBillModal />
         </Provicer>
       </Card>
     </ConfigProvider>
@@ -35,14 +37,28 @@ function App() {
 }
 
 // 条件查询的表单
-export function SearchForm() {
+export function SearchForm({openDatePicker,openCategorySelect}: {openDatePicker?: boolean,openCategorySelect?: boolean}) {
   const [form] = Form.useForm();
 
-  const { categoryList, setCondition, setAddBillVisible } = useAppContext();
+  const { categoryList, setCondition,condition, setAddBillVisible } = useAppContext();
 
   const onChange = () => {
-    setCondition(form.getFieldsValue());
+    const {category}=form.getFieldsValue()
+    setCondition({
+      categoryId:category,
+
+    });
   };
+
+  const onDateChange = (date)=>{
+    setCondition({
+      ...condition,
+      date:{
+        year:date.year(),
+        month:date.month()+1,
+      }
+    })
+  }
 
   const onClick = () => {
     setAddBillVisible(true);
@@ -56,7 +72,7 @@ export function SearchForm() {
     autoComplete="off"
   >
     <Form.Item label="月份" name="months">
-      <DatePicker onChange={onChange} picker="month" allowClear />
+      <DatePicker onChange={onDateChange} picker="month" allowClear open={openDatePicker}/>
     </Form.Item>
     <Form.Item label="账单分类" name="category">
       <Select
@@ -64,6 +80,7 @@ export function SearchForm() {
         onChange={onChange}
         allowClear
         placeholder={"请选择账单分类"}
+        open={openCategorySelect}
       >
         {categoryList.map((category) => (
           <Select.Option key={category.id}>{category.name}</Select.Option>
@@ -156,9 +173,9 @@ export function AddBillModal() {
 
   const onOk = () => {
     form.validateFields().then((value) => {
-      try{
+      try {
         addBill(value)
-      }catch(e){
+      } catch (e) {
         message.error("添加失败", 10);
       }
     });
@@ -169,39 +186,39 @@ export function AddBillModal() {
   };
 
   return <Modal title="添加账单" open={addBillVisible} onOk={onOk} onCancel={onCancel}>
-      <Form labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} form={form} autoComplete="off">
-        <Form.Item
-          label="账单时间"
-          name="time"
-          rules={[{ required: true, message: "账单时间是必须的" }]}
-        >
-          <DatePicker allowClear style={{ width: "100%" }} />
-        </Form.Item>
-        <Form.Item
-          label="账单类型"
-          name="type"
-          rules={[{ required: true, message: "账单类型是必须的" }]}
-        >
-          <Select allowClear placeholder={"账单类型"}>
-            <Select.Option value={BILL_TYPE.INCOME}>收入</Select.Option>
-            <Select.Option value={BILL_TYPE.EXPENDITURE}>支出</Select.Option>
-          </Select>
-        </Form.Item>
-        <Form.Item label="账单分类" name="category">
-          <Select allowClear placeholder={"请选择账单分类"}>
-            {categories.map((category) => (
-              <Select.Option key={category.id}>{category.name}</Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item
-          label="账单金额"
-          name="amount"
-          rules={[{ required: true, message: "账单金额是必须的" }]}
-          initialValue={0}
-        >
-          <InputNumber addonAfter="￥" min={1} style={{ width: "100%" }} />
-        </Form.Item>
-      </Form>
-    </Modal>
+    <Form labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} form={form} autoComplete="off">
+      <Form.Item
+        label="账单时间"
+        name="time"
+        rules={[{ required: true, message: "账单时间是必须的" }]}
+      >
+        <DatePicker allowClear style={{ width: "100%" }} />
+      </Form.Item>
+      <Form.Item
+        label="账单类型"
+        name="type"
+        rules={[{ required: true, message: "账单类型是必须的" }]}
+      >
+        <Select allowClear placeholder={"账单类型"}>
+          <Select.Option value={BILL_TYPE.INCOME}>收入</Select.Option>
+          <Select.Option value={BILL_TYPE.EXPENDITURE}>支出</Select.Option>
+        </Select>
+      </Form.Item>
+      <Form.Item label="账单分类" name="category">
+        <Select allowClear placeholder={"请选择账单分类"}>
+          {categories.map((category) => (
+            <Select.Option key={category.id}>{category.name}</Select.Option>
+          ))}
+        </Select>
+      </Form.Item>
+      <Form.Item
+        label="账单金额"
+        name="amount"
+        rules={[{ required: true, message: "账单金额是必须的" }]}
+        initialValue={0}
+      >
+        <InputNumber addonAfter="￥" min={1} style={{ width: "100%" }} />
+      </Form.Item>
+    </Form>
+  </Modal>
 }

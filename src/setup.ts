@@ -1,6 +1,7 @@
 import { rest } from 'msw'
 import { setupServer } from "msw/node";
 import axios from 'axios'
+import "@testing-library/jest-dom";
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
