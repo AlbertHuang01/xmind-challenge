@@ -1,6 +1,6 @@
 import { Bill, BILL_TYPE } from './model';
 import { renderHook } from '@testing-library/react-hooks';
-import { act } from '@testing-library/react'
+import { act, waitFor } from '@testing-library/react'
 import { initContext } from './context';
 import * as service from './service';
 import dayjs from 'dayjs';
@@ -22,15 +22,19 @@ describe('initContext()', () => {
   ]))
 
 
-  it('test condition with setCondition', () => {
+  it('test condition with setCondition', async () => {
     const { result } = renderHook(() => initContext())
     expect(result.current.condition).toBeNull()
     const condition = { date: { year: 2020, month: 1 } }
 
-    result.current.setCondition(condition)
+    await waitFor(() => {
+      result.current.setCondition(condition)
+    })
     expect(result.current.condition).toBe(condition)
 
-    result.current.setCondition(null)
+    await waitFor(() => {
+      result.current.setCondition(null)
+    })
     expect(result.current.condition).toBeNull()
   })
 
@@ -46,20 +50,30 @@ describe('initContext()', () => {
     it('should be billListFilted', async () => {
       const { result, waitForNextUpdate } = renderHook(() => initContext())
 
-      result.current.setCondition({ date: { year: 2020, month: 2 } })
-      await waitForNextUpdate()
+      await waitFor(() => {
+        result.current.setCondition({ date: { year: 2020, month: 2 } })
+      })
+
       expect(result.current.billList).toEqual([])
 
-      result.current.setCondition({ date: { year: 2020, month: 1 } })
+      await waitFor(() => {
+        result.current.setCondition({ date: { year: 2020, month: 1 } })
+      })
       expect(result.current.billList).toEqual(mockBillList)
 
-      result.current.setCondition({ categoryId: '6' })
+      await waitFor(() => {
+        result.current.setCondition({ categoryId: '6' })
+      })
       expect(result.current.billList).toEqual([])
 
-      result.current.setCondition({ categoryId: '1' })
+      await waitFor(() => {
+        result.current.setCondition({ categoryId: '1' })
+      })
       expect(result.current.billList[0]).toEqual(mockBillList[0])
 
-      result.current.setCondition({ date: { year: 2020, month: 1 }, categoryId: '1' })
+      await waitFor(() => {
+        result.current.setCondition({ date: { year: 2020, month: 1 }, categoryId: '1' })
+      })
       expect(result.current.billList[0]).toEqual(mockBillList[0])
     })
 
@@ -69,7 +83,9 @@ describe('initContext()', () => {
       expect(result.current.billListGroupByType.income).toEqual(1)
       expect(result.current.billListGroupByType.expenditure).toEqual(2)
 
-      result.current.setCondition({ date: { year: 2020, month: 2 } })
+      await waitFor(() => {
+        result.current.setCondition({ date: { year: 2020, month: 2 } })
+      })
       expect(result.current.billListGroupByType.income).toEqual(0)
       expect(result.current.billListGroupByType.expenditure).toEqual(0)
 
@@ -81,7 +97,9 @@ describe('initContext()', () => {
       expect(result.current.billListGroupByType.income).toEqual(1)
       expect(result.current.billListGroupByType.expenditure).toEqual(2)
 
-      result.current.setCondition({ date: { year: 2020, month: 2 } })
+      await waitFor(() => {
+        result.current.setCondition({ date: { year: 2020, month: 2 } })
+      })
       expect(result.current.billListGroupByType.income).toEqual(0)
       expect(result.current.billListGroupByType.expenditure).toEqual(0)
 
@@ -96,7 +114,9 @@ describe('initContext()', () => {
         { name: '2', totalAmount: 2 },
       ])
 
-      result.current.setCondition({ date: { year: 2020, month: 2 } })
+      await waitFor(() => {
+        result.current.setCondition({ date: { year: 2020, month: 2 } })
+      })
       expect(result.current.billListGroupByCategory).toEqual([{ name: '1', totalAmount: 0 },
       { name: '2', totalAmount: 0 },])
 
@@ -104,9 +124,10 @@ describe('initContext()', () => {
 
     it('should add bill', async () => {
       const index = 0
-      const { result, waitForNextUpdate } = renderHook(() => initContext())
-      await waitForNextUpdate()
-      await result.current.addBill(mockBillList[index])
+      const { result } = await renderHook(() => initContext())
+      await waitFor(() => {
+        result.current.addBill(mockBillList[index])
+      })
       expect(service.addBillItem).toBeCalledWith(mockBillList[index])
       expect(service.queryBillList).toBeCalled()
     })

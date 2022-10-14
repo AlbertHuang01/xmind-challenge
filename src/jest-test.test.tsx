@@ -36,8 +36,10 @@ describe('用于检查 jest 功能 是否正常', () => {
     const { getByTestId } = render(<CheckAsync />)
     const elShowButton = getByTestId('show-button')
 
-    fireEvent.click(elShowButton)
-    jest.runAllTimers()
+    act(()=>{
+      fireEvent.click(elShowButton)
+      jest.runAllTimers()
+    })
 
     const elContent = getByTestId('content')
     expect(elContent.textContent).toBe('content')
